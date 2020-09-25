@@ -1,0 +1,119 @@
+/*样式初始化：标签样式重置、公共样式*/
+/* 标签样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* 移动端点击a链接出现蓝色背景问题解决 */
+  -webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+/* 主题样式 */
+body {
+  font-family: "微软雅黑", sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+/* 去除标题标签默认font-weight:bold*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+i,
+em {
+  font-style: normal;
+}
+/* h5标签转为块级元素 */
+main,
+article,
+aside,
+figure,
+footer,
+header,
+nav,
+section,
+details,
+summary {
+  display: block;
+}
+/*去掉列表默认排列*/
+ul,
+ol,
+li {
+  list-style: none;
+}
+a,
+a:hover {
+  color: #333;
+  text-decoration: none;
+}
+/* 清除图片4px间隙 */
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+  -ms-interpolation-mode: bicubic;
+  /*为了照顾ie图片缩放失真*/
+}
+/* 清除input默认边框、外发光、自定义边框 */
+input {
+  border: 0;
+  outline: none;
+  border: 1px solid #ccc;
+}
+input,
+select {
+  vertical-align: middle;
+}
+/* 公共样式 */
+/* flex布局 */
+.df {
+  display: flex;
+}
+.df-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.df-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+/* position定位 */
+/*清除浮动的兼容IE*/
+.clearfix {
+  zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  height: 0;
+}
+/* 文字超出隐藏并显示省略号 */
+/* 单行 */
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* 多行 */
+.ellipsises {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
