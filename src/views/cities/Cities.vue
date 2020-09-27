@@ -1,11 +1,21 @@
 <template>
   <div class="cities-list">
-    <v-nav-bar></v-nav-bar>
+    <!-- 头部 -->
+    <v-header
+      title=""
+      left_text="ele.me"
+      left_icon=""
+      right_icon="user-o"
+      @handleclickleft="onClickLeft"
+      @handleclickright="onClickRight"
+    ></v-header>
+    <!-- 提示 -->
     <div class="city-tip df">
       <div>当前定位城市:</div>
       <div>定位不准时，请在城市列表中选择</div>
     </div>
-    <div class="city-row df">
+    <!-- 当前城市 -->
+    <div class="city-row df" @click="handleClickCity(curcities.id)">
       <span class="city-name">{{ curcities.name }}</span>
       <span>
         <van-icon name="arrow" />
@@ -51,7 +61,7 @@
 
 <script>
 import api from "../../api";
-import VNavBar from "@/components/VNavBar";
+import VHeader from "@/components/VHeader";
 import VTitle from "@/components/VTitle";
 
 export default {
@@ -63,7 +73,7 @@ export default {
     };
   },
   components: {
-    VNavBar,
+    VHeader,
     VTitle,
   },
   computed: {
@@ -86,6 +96,16 @@ export default {
     this.getcitiesGroup();
   },
   methods: {
+    onClickLeft() {
+      // 自身重载刷新
+      // this.$router.go(1);
+      window.location.reload();
+    },
+    onClickRight() {
+      // 跳转到我的页面
+      this.$router.push({ path: "/my" });
+    },
+
     getcitiesList() {
       api.cities.getCities({ type: "guess" }).then((res) => {
         // console.log(res);
@@ -103,6 +123,13 @@ export default {
         this.citiesGroup = res;
       });
     },
+
+    // 点击
+    handleClickCity(city_id) {
+      console.log(city_id);
+      // 跳转到 city 页面
+      this.$router.push({ path: `/city/${city_id}`, params: city_id });
+    },
   },
 };
 </script>
@@ -110,6 +137,7 @@ export default {
 <style lang='less' scoped>
 .cities-list {
   background-color: #eee;
+  padding-top: 46px;
   .city-tip {
     padding: 10px;
     font-size: 12px;

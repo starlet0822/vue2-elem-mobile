@@ -1,7 +1,8 @@
 import axios from "axios"
 
 const instance = axios.create({
-    timeout: 1000 * 5
+    timeout: 1000 * 5,
+    withCredentials: true
 })
 
 // 请求拦截器

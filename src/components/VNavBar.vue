@@ -11,11 +11,11 @@ export default {};
 </script>
 
 <style lang='less' scoped>
-.van-nav-bar {
-  background-color: #3190e8;
-  /deep/ .van-nav-bar__text,
-  .van-icon {
-    color: #fff;
-  }
-}
+// .van-nav-bar {
+//   background-color: #3190e8;
+//   /deep/ .van-nav-bar__text,
+//   .van-icon {
+//     color: #fff;
+//   }
+// }
 </style>
