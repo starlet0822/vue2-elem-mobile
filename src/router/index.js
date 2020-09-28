@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 Vue.use(VueRouter)
 
 // 路由懒加载
@@ -27,10 +28,10 @@ const routes = [
   },
   {
     path: '/home',
-    redirect:'/misite',
+    redirect: '/misite',
     name: 'Home',
     component: Home,
-    children:[
+    children: [
       {
         path: '/misite',
         name: 'Misite',
@@ -69,12 +70,22 @@ const routes = [
     name: 'Forget',
     component: Forget
   }
-  
-  
+
+
 ]
+
 
 const router = new VueRouter({
   routes
 })
+
+router.afterEach((to, from) => { 
+  // console.log(to.path)
+  // 解决了底部高亮不对应bug
+  router.app.$options.store.commit('modifActive', to.path)
+  let active = router.app.$options.store.state.active
+  // console.log(active)
+})
+
 
 export default router

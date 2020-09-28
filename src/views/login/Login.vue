@@ -103,16 +103,9 @@ export default {
     getCaptchasFn() {
       api.user.getCaptchas({}).then((res) => {
         this.captchasCodeImg = res.code;
-        // let str = res.code.split(',')
-        // console.log(str[1])
         
-        // var p_name = window.atob(str[1].replace('-','+').replace('_','/'));
-
-       let p_name = decodeURIComponent(window.atob(res.code));
-        console.log(p_name, "还原===》");
-
-        // 设置 cookie
-        document.cookie = `cap = ${this.captchasCodeImg}222`;
+        // TODO:设置 cookie 
+        document.cookie = `cap = ${this.captchasCodeImg}; path=/`;
       });
     },
     // 刷新验证码

@@ -2,8 +2,9 @@ import axios from "axios"
 
 const instance = axios.create({
     timeout: 1000 * 5,
-    withCredentials: true
+    
 })
+// axios.default.withCredentials =true
 
 // 请求拦截器
 instance.interceptors.request.use(

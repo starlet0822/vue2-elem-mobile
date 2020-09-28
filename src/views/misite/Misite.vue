@@ -173,7 +173,6 @@ export default {
 
 <style lang='less' scoped>
 .misite-page {
-  padding-top: 46px;
   
   .shop-title {
     align-items: center;

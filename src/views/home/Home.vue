@@ -3,20 +3,20 @@
     <!-- 内容 -->
     <router-view></router-view>
     <!-- 底部tab栏 -->
-    <van-tabbar v-model="active">
+    <van-tabbar v-model="$store.state.active" >
       <van-tabbar-item
-        name="home"
+        name="/misite"
         :to="{ path: '/home', query: { geohash: '23.10647,113.32446' } }"
         icon="home-o"
         >外卖</van-tabbar-item
       >
-      <van-tabbar-item name="search" to="/search" icon="search"
+      <van-tabbar-item name="/search" to="/search" icon="search"
         >搜索</van-tabbar-item
       >
-      <van-tabbar-item name="order" to="/order" icon="orders-o"
+      <van-tabbar-item name="/order" to="/order" icon="orders-o"
         >订单</van-tabbar-item
       >
-      <van-tabbar-item name="my" to="/my" icon="user-o"
+      <van-tabbar-item name="/my" to="/my" icon="user-o"
         >我的</van-tabbar-item
       >
     </van-tabbar>
@@ -24,11 +24,12 @@
 </template>
 
 <script>
+
 export default {
   name: "Home",
   data() {
     return {
-      active: "home",
+      // active: '',
       geohash: "",
       // icon: {
       //   active: 'https://img.yzcdn.cn/vant/user-active.png',
@@ -39,9 +40,12 @@ export default {
   components: {},
   created() {
     let geohash = localStorage.getItem("geohash");
-    console.log(geohash);
+    // console.log(geohash);
     this.geohash = geohash;
+    
   },
+  
+  
 };
 </script>
 

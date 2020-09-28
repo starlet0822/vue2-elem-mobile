@@ -39,6 +39,5 @@ export default {
 
 <style lang='less' scoped>
 .vip-page {
-  padding-top: 46px;
 }
 </style>

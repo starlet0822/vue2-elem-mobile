@@ -137,7 +137,6 @@ export default {
 <style lang='less' scoped>
 .cities-list {
   background-color: #eee;
-  padding-top: 46px;
   .city-tip {
     padding: 10px;
     font-size: 12px;
