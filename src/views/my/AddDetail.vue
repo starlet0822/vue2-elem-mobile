@@ -20,10 +20,14 @@
       </template>
     </van-field>
     <!-- 提示语 -->
-    <div class="tips">为了满足商家的送餐要求，建议您从列表中选择地址</div>
+    <!-- <div class="tips">为了满足商家的送餐要求，建议您从列表中选择地址</div> -->
+    <van-notice-bar
+      left-icon="volume-o"
+      text="为了满足商家的送餐要求，建议您从列表中选择地址。"
+    />
 
     <!-- 地址列表 -->
-    <section class="pois-wrap">
+    <section class="pois-wrap" v-if="poisList.length > 0">
       <ul class="pois-list">
         <li
           class="list-item"
@@ -37,7 +41,7 @@
       </ul>
     </section>
     <!-- 没有数据 -->
-    <section class="nothing">
+    <section v-if="!poisList.length" class="nothing">
       <p>找不到地址？</p>
       <p>请尝试输入小区、写字楼或学校名</p>
       <p>详细地址（如门牌号）可稍后输入哦。</p>
@@ -90,9 +94,9 @@ export default {
     handleClickItem(item) {
       // console.log(item)
       this.SET_KEYWORD(item.name);
-    //   this.keyword = item.name;
+      //   this.keyword = item.name;
       this.$router.push({
-        path: "/my/info/address/add"
+        path: "/my/info/address/add",
       });
     },
   },
@@ -103,14 +107,14 @@ export default {
 .add-detail {
   position: relative;
   height: 100%;
-  .tips {
-    padding: 5px;
-    color: #f56723;
-    font-size: 12px;
-    line-height: 1.2;
-    text-align: center;
-    background-color: #fff7cc;
-  }
+  // .tips {
+  //   padding: 5px;
+  //   color: #f56723;
+  //   font-size: 12px;
+  //   line-height: 1.2;
+  //   text-align: center;
+  //   background-color: #fff7cc;
+  // }
   .pois-wrap {
     .pois-list {
       .list-item {

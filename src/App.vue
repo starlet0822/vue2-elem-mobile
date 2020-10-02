@@ -8,7 +8,7 @@
 @import "../src/assets/styles/reset.less";
 // 全局样式
 #app {
-  padding-top: 46px;
+  padding: 46px 0;
   width: 100%;
   height: 100%;
   

@@ -2,7 +2,7 @@
   <div class="address">
     <!-- 头部 -->
     <v-header
-      title="编辑地址"
+      title="地址列表"
       left_icon="arrow-left"
       @handleclickleft="onClickLeft"
     ></v-header>
@@ -31,7 +31,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      chosenAddressId: "1",
+      chosenAddressId: "",
       addressList: [],
     };
   },

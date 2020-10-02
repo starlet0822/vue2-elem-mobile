@@ -9,6 +9,7 @@ import home from './home'
 import search from './search'
 import user from './user'
 import address from './address'
+import food from './food'
 
 // 导出接口
 export default {
@@ -18,5 +19,6 @@ export default {
     search,
     user,
     address,
+    food,
     // ...
 }

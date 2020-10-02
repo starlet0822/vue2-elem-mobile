@@ -18,6 +18,7 @@ const UserInfo = () => import(/* webpackChunkName: "userInfo" */ '../views/my/Us
 const Address = () => import(/* webpackChunkName: "address" */ '../views/my/Address.vue')
 const AddressAdd = () => import(/* webpackChunkName: "address_add" */ '../views/my/AddressAdd.vue')
 const AddDetail = () => import(/* webpackChunkName: "detail_add" */ '../views/my/AddDetail.vue')
+const Food = () => import(/* webpackChunkName: "food" */ '../views/food/Food.vue')
 
 const routes = [
   {
@@ -58,6 +59,11 @@ const routes = [
       }
     ]
 
+  },
+  {
+    path: '/food',
+    name: 'Food',
+    component: Food
   },
   {
     path: '/vipcard',

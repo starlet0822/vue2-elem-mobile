@@ -10,7 +10,7 @@
       @handleclickright="onClickRight"
     ></v-header>
     <!-- 分类导航 -->
-    <van-swipe :autoplay="3000">
+    <van-swipe>
       <van-swipe-item v-for="(item, index) in cateObj" :key="index">
         <van-grid :column-num="4">
           <van-grid-item
@@ -18,6 +18,7 @@
             :key="value.id"
             :icon="'https://fuss10.elemecdn.com' + value.image_url"
             :text="value.title"
+            @click="handleItem(value)"
           />
         </van-grid>
       </van-swipe-item>
@@ -28,7 +29,7 @@
       <v-title text="附近商家"></v-title>
     </div>
     <!-- 店铺列表 -->
-    <section class="shop-list">
+    <!-- <section class="shop-list">
       <div class="shop-item df" v-for="item in shopList" :key="item.id">
         <div class="shop-img">
           <img :src="'https://elm.cangdu.org/img/' + item.image_path" />
@@ -85,7 +86,8 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
+    <v-shop-list :data="shopList"></v-shop-list>
   </div>
 </template>
 
@@ -93,6 +95,7 @@
 import api from "../../api";
 import VHeader from "@/components/VHeader.vue";
 import VTitle from "@/components/VTitle";
+import VShopList from "@/components/common/ShopList";
 
 export default {
   data() {
@@ -107,6 +110,7 @@ export default {
   components: {
     VTitle,
     VHeader,
+    VShopList,
   },
   created() {
     let { geohash } = this.$route.query;
@@ -122,7 +126,7 @@ export default {
   methods: {
     onClickLeft() {
       // 自身重载刷新
-      this.$router.push({path:'/search'})
+      this.$router.push({ path: "/search" });
     },
     onClickRight() {
       // 跳转到我的页面
@@ -155,17 +159,26 @@ export default {
         .getShopList({
           latitude: _geohash[0],
           longitude: _geohash[1],
-          // offset:0,
-          // limit:20,
-          // restaurant_category_id:'',
-          // order_by:'',
-          // delivery_mode:'',
-          // support_ids,
-          // restaurant_category_ids:''
+          offset: 0,
+          limit: 20,
+          restaurant_category_id: "",
+          order_by: "",
+          delivery_mode: [],
+          support_ids: [],
+          restaurant_category_ids: [],
         })
         .then((res) => {
           this.shopList = res;
         });
+    },
+    // // 点击每一项
+    handleItem(item) {
+      console.log(item);
+      let geohash = localStorage.getItem("geohash");
+      this.$router.push({
+        path: "/food",
+        query: { geohash, title: item.title, restaurant_category_id: 239 },
+      });
     },
   },
 };
@@ -173,7 +186,18 @@ export default {
 
 <style lang='less' scoped>
 .misite-page {
-  
+  /deep/ .van-swipe__indicators {
+    bottom: 6px;
+    .van-swipe__indicator.van-swipe__indicator--active {
+      background-color: #1989fa;
+    }
+    .van-swipe__indicator {
+      background-color: #666;
+      width: 8px;
+      height: 8px;
+    }
+  }
+
   .shop-title {
     align-items: center;
     padding-left: 5px;
@@ -183,68 +207,68 @@ export default {
       color: #999;
     }
   }
-  .shop-list {
-    padding: 5px;
-    .shop-item {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-      .shop-img {
-        // flex: 1;
-        width: 54px;
-        height: 54px;
-        margin-right: 0.6rem;
-      }
-    }
-    .shop-info {
-      flex: 1;
-      // flex: 3;
-      justify-content: space-between;
-    }
-    .shop-info-t {
-      .shop-name-wrap {
-        .shop-name {
-          width: 8rem;
-          margin-left: 5px;
-          font-size: 14px;
-          font-weight: 600;
-        }
-      }
-    }
-    .shop-info-m {
-      .shop-rate {
-        margin: 12px 0;
-        color: #ff9a0d;
-        /deep/ .van-rate__item:not(:last-child) {
-          padding-right: 2px;
-        }
-        .month-sale {
-          font-size: 12px;
-          color: #666;
-          //  margin-bottom: -4px;
-        }
-      }
-      /deep/ .van-tag {
-        // line-height: 0;
-        font-size: 10px;
-        padding: 0 2px;
-      }
-    }
-    .shop-info-b {
-      color: #666;
-      font-size: 12px;
-      .delivery-cost {
-        // width: 100px;
-        margin-right: 5px;
-        font-size: 12px;
-      }
-      .time-wrap {
-        color: #666;
-        .time {
-          color: var(--themeColor);
-          font-size: 12px;
-        }
-      }
-    }
-  }
+  // .shop-list {
+  //   padding: 5px;
+  //   .shop-item {
+  //     padding: 10px 0;
+  //     border-bottom: 1px solid #eee;
+  //     .shop-img {
+  //       // flex: 1;
+  //       width: 54px;
+  //       height: 54px;
+  //       margin-right: 0.6rem;
+  //     }
+  //   }
+  //   .shop-info {
+  //     flex: 1;
+  //     // flex: 3;
+  //     justify-content: space-between;
+  //   }
+  //   .shop-info-t {
+  //     .shop-name-wrap {
+  //       .shop-name {
+  //         width: 8rem;
+  //         margin-left: 5px;
+  //         font-size: 14px;
+  //         font-weight: 600;
+  //       }
+  //     }
+  //   }
+  //   .shop-info-m {
+  //     .shop-rate {
+  //       margin: 12px 0;
+  //       color: #ff9a0d;
+  //       /deep/ .van-rate__item:not(:last-child) {
+  //         padding-right: 2px;
+  //       }
+  //       .month-sale {
+  //         font-size: 12px;
+  //         color: #666;
+  //         //  margin-bottom: -4px;
+  //       }
+  //     }
+  //     /deep/ .van-tag {
+  //       // line-height: 0;
+  //       font-size: 10px;
+  //       padding: 0 2px;
+  //     }
+  //   }
+  //   .shop-info-b {
+  //     color: #666;
+  //     font-size: 12px;
+  //     .delivery-cost {
+  //       // width: 100px;
+  //       margin-right: 5px;
+  //       font-size: 12px;
+  //     }
+  //     .time-wrap {
+  //       color: #666;
+  //       .time {
+  //         color: var(--themeColor);
+  //         font-size: 12px;
+  //       }
+  //     }
+  //   }
+  // }
 }
 </style>

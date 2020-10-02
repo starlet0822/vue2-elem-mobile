@@ -53,5 +53,8 @@ export default {
 .home {
   // padding-bottom: 50px !important;
   background-color: #fff;
+  .van-tabbar{
+    height: 46px;
+  }
 }
 </style>
