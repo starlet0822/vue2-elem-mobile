@@ -110,7 +110,7 @@ export default {
   },
   created() {
     let { geohash } = this.$route.query;
-    console.log(geohash);
+    // console.log(geohash);
     this.geohash = geohash;
 
     localStorage.setItem("geohash", this.geohash);

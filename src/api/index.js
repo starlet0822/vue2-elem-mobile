@@ -8,6 +8,7 @@ import pois from './pois'
 import home from './home'
 import search from './search'
 import user from './user'
+import address from './address'
 
 // 导出接口
 export default {
@@ -16,5 +17,6 @@ export default {
     home,
     search,
     user,
+    address,
     // ...
 }

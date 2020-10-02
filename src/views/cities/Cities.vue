@@ -126,7 +126,7 @@ export default {
 
     // 点击
     handleClickCity(city_id) {
-      console.log(city_id);
+      // console.log(city_id);
       // 跳转到 city 页面
       this.$router.push({ path: `/city/${city_id}`, params: city_id });
     },

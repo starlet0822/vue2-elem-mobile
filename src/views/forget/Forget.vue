@@ -72,6 +72,7 @@ import api from "../../api";
 export default {
   data() {
     return {
+      // userInfo:{},
       resetForm: {
         username: null,
         oldpassWord: null,
@@ -86,12 +87,25 @@ export default {
     VHeader,
   },
   created() {
+    this.getUserInfoFn();
     this.getCaptchasFn();
+    let userInfo = localStorage.getItem("userInfo");
+    userInfo = JSON.parse(userInfo) == null ? {} : JSON.parse(userInfo);
+    // console.log(this.userInfo);
+    this.resetForm.username = userInfo.username;
   },
   methods: {
     onClickLeft() {
       // 返回上一页
       this.$router.go(-1);
+    },
+    // 获取用户信息
+    getUserInfoFn() {
+      api.user
+        .getUserInfo({
+          user_id: null,
+        })
+        .then((res) => {});
     },
     // 获取验证码
     getCaptchasFn() {
@@ -107,7 +121,17 @@ export default {
     onSubmit(resetForm) {
       console.log(resetForm);
       // TODO:验证码失效
-      api.user.changePassword(resetForm).then((res) => {});
+      api.user.changePassword(resetForm).then((res) => {
+        if (!res.status) {
+          // 失败
+          this.$toast.fail(res.message);
+          this.refreshCode();
+          return;
+        }
+        // 成功
+        this.$toast.success(res.success);
+        this.$router.go(-1);
+      });
     },
   },
 };

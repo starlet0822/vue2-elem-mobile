@@ -77,6 +77,7 @@ export default {
       },
       captchasCodeImg: null,
       isSHowPwd: false,
+      user_id: null,
     };
   },
   components: {
@@ -92,10 +93,11 @@ export default {
       // 返回上一页
       this.$router.go(-1);
     },
+    // 获取用户信息
     getUserInfoFn() {
       api.user
         .getUserInfo({
-          user_id: "",
+          user_id: this.user_id,
         })
         .then((res) => {});
     },
@@ -103,9 +105,9 @@ export default {
     getCaptchasFn() {
       api.user.getCaptchas({}).then((res) => {
         this.captchasCodeImg = res.code;
-        
-        // TODO:设置 cookie 
-        document.cookie = `cap = ${this.captchasCodeImg}; path=/`;
+
+        // TODO:设置 cookie
+        // document.cookie = `cap = ${this.captchasCodeImg}; path=/`;
       });
     },
     // 刷新验证码
@@ -126,7 +128,18 @@ export default {
     onSubmit(userform) {
       console.log(userform);
       // TODO:登录验证码失效
-      api.user.accountLogin(userform).then((res) => {});
+      api.user.accountLogin(userform).then((res) => {
+        // 登录失败
+        if (res.status==0) {
+          this.$toast.fail(res.message);
+          this.refreshCode() // 刷新验证码
+          return
+        }
+
+        localStorage.setItem("userInfo", JSON.stringify(res));
+        localStorage.setItem("user_id", JSON.stringify(res.user_id));
+        this.$router.push({ path: "/my" });
+      });
     },
   },
 };

@@ -6,7 +6,7 @@
     <van-tabbar v-model="$store.state.active" >
       <van-tabbar-item
         name="/misite"
-        :to="{ path: '/home', query: { geohash: '23.10647,113.32446' } }"
+        :to="{ path: '/misite', query: { geohash: '23.10647,113.32446' } }"
         icon="home-o"
         >外卖</van-tabbar-item
       >

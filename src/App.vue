@@ -9,6 +9,8 @@
 // 全局样式
 #app {
   padding-top: 46px;
+  width: 100%;
+  height: 100%;
   
   /deep/.van-nav-bar {
     // background-color: #3190e8;

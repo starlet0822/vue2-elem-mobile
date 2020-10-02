@@ -5,6 +5,12 @@ function resolve(dir) {
 
 module.exports = {
     //配置别名
-    chainWebpack: (config) => { config.resolve.alias.set('@', resolve('src')).set('@assets', resolve('src/assets')) }
+    chainWebpack: (config) => { config.resolve.alias.set('@', resolve('src')).set('@assets', resolve('src/assets')) },
+
+    devServer:{
+        // port:'端口'
+        open:true,
+        hot:true,
+    }
 }
 

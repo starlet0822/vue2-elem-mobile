@@ -9,14 +9,7 @@
       @handleclickleft="onClickLeft"
       @handleclickright="onClickRight"
     ></v-header>
-    <!-- <van-nav-bar
-      :title="cityObj.name"
-      left-text=""
-      right-text="切换城市"
-      left-arrow
-      @click-left="onClickLeft"
-      @click-right="onClickRight"
-    /> -->
+   
     <!-- 表单 -->
     <van-form @submit="onSubmit">
       <van-field
@@ -128,7 +121,6 @@ export default {
 
 <style lang='less' scoped>
 .city-search {
-  padding-top: 46px;
   .pois-wrap {
     .pois-list {
       .list-item {

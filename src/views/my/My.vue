@@ -12,11 +12,21 @@
     <!-- 用户信息 -->
     <div class="user-wrap df">
       <div class="user-avatar">
-        <img src="" alt="" />
+        <img
+          :src="
+            userInfo.avatar
+              ? 'http://elm.cangdu.org/img/'+userInfo.avatar
+              : '~@/assets/images/base.jpg'
+          "
+          alt=""
+        />
       </div>
       <div class="user-info df-sb">
         <section>
-          <div class="user-nickNname" @click="loginFn">登录 / 注册</div>
+          <div class="user-nickNname" v-if="userInfo.username" @click="handleInfo">
+            {{ userInfo.username }}
+          </div>
+          <div class="user-nickNname" v-else @click="loginFn">登录 / 注册</div>
           <div class="user-telphone df-sb">
             <van-icon name="phone-o" />
             <span>暂无绑定手机号码</span>
@@ -29,19 +39,21 @@
     <van-grid :border="false" :column-num="3">
       <van-grid-item>
         <div class="item df-col">
-          <div class="balance fs24">0.00<i>元</i></div>
+          <div class="balance fs24">{{ userInfo.balance || 0 }}<i>元</i></div>
           <div class="pt12">我的余额</div>
         </div>
       </van-grid-item>
       <van-grid-item>
         <div class="item df-col">
-          <div class="gift_amount fs24">3<i>个</i></div>
+          <div class="gift_amount fs24">
+            {{ userInfo.gift_amount || 0 }}<i>个</i>
+          </div>
           <div class="pt12">我的优惠</div>
         </div>
       </van-grid-item>
       <van-grid-item>
         <div class="item df-col">
-          <div class="point fs24">0<i>分</i></div>
+          <div class="point fs24">{{ userInfo.point || 0 }}<i>分</i></div>
           <div class="pt8">我的积分</div>
         </div>
       </van-grid-item>
@@ -71,6 +83,7 @@ import VHeader from "@/components/VHeader";
 export default {
   data() {
     return {
+      userInfo: {},
       lists: [
         {
           id: 1,
@@ -92,6 +105,12 @@ export default {
       ],
     };
   },
+  created() {
+    let userInfo = localStorage.getItem("userInfo");
+    // console.log(userInfo);
+    this.userInfo = JSON.parse(userInfo) == null ? {} : JSON.parse(userInfo);
+  },
+  computed: {},
   components: {
     VHeader,
   },
@@ -100,8 +119,13 @@ export default {
       // 返回上一页
       this.$router.go(-1);
     },
-    loginFn(){
-      this.$router.push({path:'/login'})
+    loginFn() {
+      this.$router.push({ path: "/login" });
+    },
+    // 进入用户详情页
+    handleInfo(){
+      // console.log('ss')
+      this.$router.push({ path: "/my/info" });
     }
   },
 };
@@ -118,7 +142,7 @@ export default {
       width: 50px;
       height: 50px;
       border-radius: 100%;
-      border: 1px solid #000;
+      // border: 1px solid #000;
       overflow: hidden;
       margin-right: 14px;
     }

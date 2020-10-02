@@ -14,6 +14,10 @@ const My = () => import(/* webpackChunkName: "my" */ '../views/my/My.vue')
 const VipCard = () => import(/* webpackChunkName: "vipcard" */ '../views/vipcard/VipCard.vue')
 const Login = () => import(/* webpackChunkName: "login" */ '../views/login/Login.vue')
 const Forget = () => import(/* webpackChunkName: "forget" */ '../views/forget/Forget.vue')
+const UserInfo = () => import(/* webpackChunkName: "userInfo" */ '../views/my/UserInfo.vue')
+const Address = () => import(/* webpackChunkName: "address" */ '../views/my/Address.vue')
+const AddressAdd = () => import(/* webpackChunkName: "address_add" */ '../views/my/AddressAdd.vue')
+const AddDetail = () => import(/* webpackChunkName: "detail_add" */ '../views/my/AddDetail.vue')
 
 const routes = [
   {
@@ -69,7 +73,28 @@ const routes = [
     path: '/forget',
     name: 'Forget',
     component: Forget
-  }
+  },
+  {
+    path: '/my/info',
+    name: 'UserInfo',
+    component: UserInfo
+  },
+  {
+    path: '/my/info/address',
+    name: 'Address',
+    component: Address
+  },
+  {
+    path: '/my/info/address/add',
+    name: 'AddressAdd',
+    component: AddressAdd
+  },
+  {
+    path: '/my/info/address/add/addDetail',
+    name: 'AddDetail',
+    component: AddDetail
+  },
+  
 
 
 ]
