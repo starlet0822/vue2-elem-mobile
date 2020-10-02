@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Button, Field, Form, Grid, GridItem, Icon, NavBar, Rate, Search, Swipe, SwipeItem, Tabbar, TabbarItem, Tag,Cell,CellGroup, Dialog, Toast, SubmitBar, AddressList, Empty, NoticeBar, DropdownMenu, DropdownItem } from 'vant';
+import { Button, Field, Form, Grid, GridItem, Icon, NavBar, Rate, Search, Swipe, SwipeItem, Tabbar, TabbarItem, Tag,Cell,CellGroup, Dialog, Toast, SubmitBar, AddressList, Empty, NoticeBar, DropdownMenu, DropdownItem, TreeSelect, Sidebar, SidebarItem } from 'vant';
 
 Vue.use(Button)
 Vue.use(NavBar)
@@ -25,4 +25,7 @@ Vue.use(Empty);
 Vue.use(NoticeBar);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
+Vue.use(TreeSelect);
+Vue.use(Sidebar);
+Vue.use(SidebarItem);
 

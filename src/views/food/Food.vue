@@ -8,20 +8,63 @@
     ></v-header>
     <!-- 筛选工具 -->
     <section class="tools">
-      <van-dropdown-menu>
-        <!-- <van-dropdown-item v-model="value1" :options="option1" />
-      <van-dropdown-item v-model="value2" :options="option2" />
-      <van-dropdown-item v-model="value3" :options="option3" /> -->
-        <van-dropdown-item title="分类" ref="item"> 分类 </van-dropdown-item>
+      <van-dropdown-menu active-color="#1989fa">
+        <!-- 分类 -->
+        <van-dropdown-item title="分类" ref="item">
+          <section class="category-con df">
+            <!-- 左侧菜单项 -->
+            <van-sidebar v-model="activeKey">
+              <van-sidebar-item
+                :badge="item.count"
+                v-for="item in categoryList"
+                :key="item.id"
+              >
+                <template #title>
+                  <van-icon
+                    size="20"
+                    :name="'https://fuss10.elemecdn.com/' + item.image_url"
+                  />
+                  <span class="item-name">{{ item.name }}</span>
+                </template>
+              </van-sidebar-item>
+            </van-sidebar>
+            <!-- 右侧内容 -->
+            <div class="right-con">
+              <van-cell-group>
+                <template
+                  v-for="(item2, index) in categoryList[activeKey]
+                    .sub_categories"
+                >
+                  <van-cell
+                    v-if="index !== 0"
+                    :title="item2.name"
+                    :value="item2.count"
+                    :key="item2.id"
+                  />
+                </template>
+              </van-cell-group>
+            </div>
+          </section>
+        </van-dropdown-item>
+        <!-- 排序 -->
         <van-dropdown-item title="排序" ref="item">
           <van-cell
             :title="item.title"
-            icon="location-o"
             v-for="item in orderbyList"
             :key="item.id"
             @click="handleItem(item.id)"
-          />
+          >
+            <!-- 使用 right-icon 插槽来自定义右侧图标 -->
+            <template #icon>
+              <van-icon
+                :name="item.icon"
+                :color="item.color"
+                class="item-icon"
+              />
+            </template>
+          </van-cell>
         </van-dropdown-item>
+        <!-- 筛选 -->
         <van-dropdown-item title="筛选" ref="item">
           <v-title text="配送方式"></v-title>
           <van-tag
@@ -73,45 +116,50 @@ export default {
       modes: [],
       attributes: [],
       categoryList: [],
+      activeKey: 0,
+      //   items: [{ text: "分组 1" }, { text: "分组 2" }],
       orderbyList: [
         {
           id: 4,
           title: "智能排序",
-          icon: "location-o",
+          icon: "exchange",
+          color: "#3190e8",
         },
         {
           id: 5,
           title: "距离最近",
           icon: "location-o",
+          color: "#97cee9",
         },
         {
           id: 6,
           title: "销量最高",
-          icon: "location-o",
+          icon: "fire-o",
+          color: "#f5acac",
         },
         {
           id: 1,
           title: "起送价最低",
-          icon: "location-o",
+          icon: "gold-coin-o",
+          color: "#e9bf3a",
         },
         {
           id: 2,
           title: "配送速度最快",
-          icon: "location-o",
+          icon: "clock-o",
+          color: "#9be3db",
         },
         {
           id: 3,
           title: "评分最高",
-          icon: "location-o",
+          icon: "star-o",
+          color: "#f2c683",
         },
       ],
 
       switch1: false,
       switch2: false,
 
-      value1: 0,
-      value2: "a",
-      value3: "A",
       option1: [
         { text: "全部商品", value: 0 },
         { text: "新款商品", value: 1 },
@@ -142,6 +190,11 @@ export default {
     this.getAttributesList();
     this.getCategorys();
     this.getShopsList();
+  },
+  computed: {
+    subCategories() {
+      return this.categoryList[this.activeKey].sub_categories.splice(0, 1);
+    },
   },
   methods: {
     onClickLeft() {
@@ -220,9 +273,49 @@ export default {
   .tools {
     width: 100%;
     position: fixed;
-    z-index: 4444;
+    z-index: 99;
     left: 0;
     top: 46px;
+    .category-con {
+      font-size: 12px;
+      height: 360px;
+      overflow: hidden;
+      .van-sidebar {
+        flex: 1;
+        // width: 50vw;
+        .van-sidebar-item {
+          padding: 10px;
+        }
+        .van-sidebar-item--select::before {
+          background-color: var(--themeColor);
+        }
+        /deep/.van-sidebar-item__text {
+          display: flex;
+          align-items: center;
+          .item-name {
+            margin-left: 0.6rem;
+            line-height: 20px;
+          }
+          .van-info {
+            right: 20px;
+            background-color: var(--themeColor);
+          }
+        }
+      }
+      .right-con {
+        flex: 1;
+        //   width: 50vw;
+        overflow: auto;
+        .van-cell {
+          padding: 8px;
+        }
+      }
+    }
+    .item-icon {
+      font-size: 16px;
+      margin-right: 0.5rem;
+      line-height: inherit;
+    }
     /deep/.van-dropdown-menu__bar {
       height: 30px;
     }
