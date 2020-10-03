@@ -9,7 +9,7 @@
     <!-- 筛选工具 -->
     <section class="tools">
       <van-dropdown-menu active-color="#1989fa">
-        <!-- 分类 -->
+        <!-- 分类 TODO:未完成 -->
         <van-dropdown-item title="分类" ref="item">
           <section class="category-con df">
             <!-- 左侧菜单项 -->
@@ -22,7 +22,11 @@
                 <template #title>
                   <van-icon
                     size="20"
-                    :name="'https://fuss10.elemecdn.com/' + item.image_url"
+                    :name="
+                      item.image_url
+                        ? 'https://fuss10.elemecdn.com/' + item.image_url
+                        : '../../assets/images/base.jpg'
+                    "
                   />
                   <span class="item-name">{{ item.name }}</span>
                 </template>
@@ -31,10 +35,11 @@
             <!-- 右侧内容 -->
             <div class="right-con">
               <van-cell-group>
-                <template
+                <!-- <template
                   v-for="(item2, index) in categoryList[activeKey]
                     .sub_categories"
-                >
+                > -->
+                <template v-for="(item2, index) in categoryDetail[activeKey]">
                   <van-cell
                     v-if="index !== 0"
                     :title="item2.name"
@@ -47,7 +52,7 @@
           </section>
         </van-dropdown-item>
         <!-- 排序 -->
-        <van-dropdown-item title="排序" ref="item">
+        <van-dropdown-item title="排序" ref="sort">
           <van-cell
             :title="item.title"
             v-for="item in orderbyList"
@@ -62,37 +67,66 @@
                 class="item-icon"
               />
             </template>
+            <template #right-icon>
+              <van-icon
+                v-show="isActive === item.id"
+                name="success"
+                :color="item.color"
+              />
+            </template>
           </van-cell>
         </van-dropdown-item>
         <!-- 筛选 -->
-        <van-dropdown-item title="筛选" ref="item">
+        <van-dropdown-item title="筛选" ref="sure">
           <v-title text="配送方式"></v-title>
           <van-tag
+            size="medium"
             plain
             type="primary"
-            :color="'#' + item.color"
+            :color="!item.isRight ? '#999' : '#' + item.color"
             class="ml10"
-            v-for="item in modes"
+            v-for="(item, index) in modes"
             :key="item.id"
-            >{{ item.text }}</van-tag
+            @click="handleModes(index, item.id)"
           >
+            <template #default>
+              <van-icon name="success" v-show="item.isRight" />
+              <span>{{ item.text }}</span>
+            </template>
+          </van-tag>
           <v-title text="商家属性（可以多选）"></v-title>
           <div class="attributes">
             <van-tag
               plain
+              :color="!item.isChecked ? '#999' : '#3190e8'"
+              size="medium"
               type="primary"
-              class="ml5"
-              v-for="item in attributes"
+              class="mlb5"
+              v-for="(item, index) in attributes"
               :key="item.id"
-              >{{ item.name }}</van-tag
+              @click="handleAttr(index, item.id)"
             >
-            <!-- <van-tag plain type="primary" class="ml5">标签</van-tag>
-            <van-tag plain type="primary" class="ml5">标签</van-tag>
-            <van-tag plain type="primary" class="ml5">标签</van-tag> -->
+              <template #default>
+                <i
+                  :style="{
+                    color: '#' + item.icon_color,
+                    marginRight: 3 + 'px',
+                  }"
+                  >{{ item.icon_name }}</i
+                >
+                <span>{{ item.name }}</span>
+              </template>
+            </van-tag>
           </div>
           <div class="btns df-sb">
-            <van-button type="default" size="small">清空</van-button>
-            <van-button type="primary" size="small">确定</van-button>
+            <van-button type="default" size="small" @click="onClear"
+              >清空</van-button
+            >
+            <van-button type="primary" size="small" @click="onConfirm"
+              >确定{{
+                selectNum === 0 ? "" : "(" + selectNum + ")"
+              }}</van-button
+            >
           </div>
         </van-dropdown-item>
       </van-dropdown-menu>
@@ -111,13 +145,19 @@ import api from "../../api";
 export default {
   data() {
     return {
+      // 请求参数
+      delivery_mode: [],
+      support_ids: [],
+      // ------------
       title: "",
+      attrId: "", // 属性id
+      isActive: 4, // 控制是否勾中
       shopList: [],
       modes: [],
       attributes: [],
       categoryList: [],
+      categoryDetail: [], // 分类右侧数据
       activeKey: 0,
-      //   items: [{ text: "分组 1" }, { text: "分组 2" }],
       orderbyList: [
         {
           id: 4,
@@ -156,25 +196,6 @@ export default {
           color: "#f2c683",
         },
       ],
-
-      switch1: false,
-      switch2: false,
-
-      option1: [
-        { text: "全部商品", value: 0 },
-        { text: "新款商品", value: 1 },
-        { text: "活动商品", value: 2 },
-      ],
-      option2: [
-        { text: "默认排序", value: "a" },
-        { text: "好评排序", value: "b" },
-        { text: "销量排序", value: "c" },
-      ],
-      option3: [
-        { text: "A", value: "A" },
-        { text: "B", value: "B" },
-        { text: "C", value: "C" },
-      ],
     };
   },
   components: {
@@ -192,8 +213,9 @@ export default {
     this.getShopsList();
   },
   computed: {
-    subCategories() {
-      return this.categoryList[this.activeKey].sub_categories.splice(0, 1);
+    // 计算选中的个数
+    selectNum() {
+      return this.support_ids.length + this.delivery_mode.length;
     },
   },
   methods: {
@@ -201,12 +223,55 @@ export default {
       // 返回上一页
       this.$router.go(-1);
     },
+    // 确定
     onConfirm() {
-      this.$refs.item.toggle();
+      this.$refs.sure.toggle();
+      this.getShopsList();
+    },
+    // 清空
+    onClear() {
+      // console.log('onClear')
+      this.modes.forEach((v) => {
+        v.isRight = false;
+      });
+      this.attributes.forEach((v) => {
+        v.isChecked = false;
+      });
+      this.delivery_mode = [];
+      this.support_ids = [];
+    },
+    // 点击配送方式
+    handleModes(index, id) {
+      // 修改选中状态
+      this.modes[index].isRight = !this.modes[index].isRight;
+      if (this.modes[index].isRight) {
+        this.delivery_mode.push(this.modes[index].id);
+      } else {
+        let idx = this.delivery_mode.indexOf(id);
+        this.delivery_mode.splice(idx, 1);
+      }
+    },
+    // 点商家属性
+    handleAttr(index, id) {
+      // let { index, id } = obj;
+      // 修改选中状态
+      this.attributes[index].isChecked = !this.attributes[index].isChecked;
+      if (this.attributes[index].isChecked) {
+        // this.support_ids = this.support_ids.concat([id]);
+        // this.support_ids.splice(index,0,id);
+        this.support_ids.push(this.attributes[index].id);
+      } else {
+        let idx = this.support_ids.indexOf(id);
+        this.support_ids.splice(idx, 1);
+      }
     },
     // 点击每一项
-    handleItem(id) {
-      console.log(id);
+    handleItem(order_by) {
+      //   console.log(order_by);
+      // 关闭下拉菜单
+      this.isActive = order_by;
+      this.$refs.sort.toggle();
+      this.getShopsList(order_by);
     },
     // 获取配送方式
     getModes() {
@@ -216,6 +281,9 @@ export default {
           longitude: "",
         })
         .then((res) => {
+          res.forEach((v) => {
+            v.isRight = false;
+          });
           this.modes = res;
         });
     },
@@ -227,6 +295,10 @@ export default {
           longitude: "",
         })
         .then((res) => {
+          res.forEach((v) => {
+            v.isChecked = false;
+          });
+          // console.log(res);
           this.attributes = res;
         });
     },
@@ -239,10 +311,16 @@ export default {
         })
         .then((res) => {
           this.categoryList = res;
+          let categoryDetail = this.categoryList.reduce((arr, cur) => {
+            arr.push(cur.sub_categories);
+            return arr;
+          }, []);
+          // console.log('arr',categoryDetail)
+          this.categoryDetail = categoryDetail;
         });
     },
     // 获取商铺列表
-    getShopsList() {
+    getShopsList(order_by) {
       let geohash = localStorage.getItem("geohash");
       let _geohash = geohash.split(",");
       // console.log(_geohash)
@@ -252,10 +330,10 @@ export default {
           longitude: _geohash[1],
           offset: 0,
           limit: 20,
-          restaurant_category_id: "",
-          order_by: "",
-          delivery_mode: [],
-          support_ids: [],
+          restaurant_category_id: 239,
+          order_by: order_by,
+          delivery_mode: this.delivery_mode,
+          support_ids: this.support_ids,
           restaurant_category_ids: [],
         })
         .then((res) => {
@@ -324,8 +402,9 @@ export default {
     }
     .attributes {
       margin-left: 5px;
-      .ml5 {
-        margin-left: 5px;
+      .mlb5 {
+        margin-left: 0.5rem;
+        margin-bottom: 0.5rem;
       }
     }
     .btns {
